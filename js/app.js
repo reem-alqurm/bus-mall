@@ -3,17 +3,20 @@
     let max = 25;
     let attemps = 0;
     let arrayOfProducts = [];
+    let namesArr = [];
     let container = document.getElementById('container')
     let Image1 = document.getElementById('image1');
     let Image2 = document.getElementById('image2');
     let Image3 = document.getElementById('image3');
     
     function NewProduct(name, source) {
-        this.productName = name;
+        this.name = name;
         this.source = source;
         this.selectedProducts = 0;
         this.numShowen = 0;
         arrayOfProducts.push(this);
+        namesArr.push(this.name);
+
     }
     new NewProduct('bag', 'img/bag.jpg');
     new NewProduct('banana', 'img/banana.jpg');
@@ -92,15 +95,41 @@
             for (let i = 0; i < arrayOfProducts.length; i++) {
                 li = document.createElement('li')
                 list.appendChild(li);
-                li.textContent = `${arrayOfProducts[i].productName} Has ${arrayOfProducts[i].selectedProducts} selectedPrds and Showen ${arrayOfProducts[i].numShowen}`
+                li.textContent = `${arrayOfProducts[i].name} Has ${arrayOfProducts[i].selectedProducts} selectedPrds and Showen ${arrayOfProducts[i].numShowen}`
+                
             }
-            document.getElementById('view').style.display = 'block';
-            container.removeEventListener('click', imageClick)
+                
+                container.removeEventListener('click', imageClick)
+                chartRender();
+         }
+            }
+
+            function chartRender(){
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var chart = new Chart(ctx, {
+                // The type of chart we want to create
+                type: 'bar',
+            
+                // The data for our dataset
+                data: {
+                    labels: namesArr,
+                    datasets: [{
+                        label: 'Product Votes',
+                        backgroundColor: '#e36bae',
+                        borderColor: 'rgb(255, 99, 132)',
+                        data: [1,2,2,3,1,5,6,2,3,8],
+                    },{
+                        label: 'Goats Displayed',
+                        backgroundColor: '#f1d1d0',
+                        borderColor:'rgb(155,100,30)',
+                        data: [1,2,2,3,1,5,6,2,3,8],
+            
+                    }]
+                },
+            
+                // Configuration options go here
+                options: {}
+            });
         }
-    }
-    
-    // function viewResult() {
-    //     // document.getElementById()
-    //     document.getElementById('lists').style.display = 'block';
-    
-    // }
+            
+            

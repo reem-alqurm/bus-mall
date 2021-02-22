@@ -4,11 +4,14 @@
     let attemps = 0;
     let arrayOfProducts = [];
     let namesArr = [];
+    let arrOfVotes = [];
+    let imagesCountArr = [];
     let container = document.getElementById('container')
     let Image1 = document.getElementById('image1');
     let Image2 = document.getElementById('image2');
     let Image3 = document.getElementById('image3');
-    
+    let btn=document.getElementById('view1');
+
     function NewProduct(name, source) {
         this.name = name;
         this.source = source;
@@ -42,15 +45,19 @@
     let Image1Index;
     let Image2Index;
     let Image3Index;
+    let checkindex = [];
     function render() {
         Image1Index = generateRandomIndex();
         Image2Index = generateRandomIndex();
         Image3Index = generateRandomIndex();
-        while ((Image1Index === Image2Index) || (Image1Index === Image3Index) || (Image2Index === Image3Index)) {
+        while ((Image1Index === Image2Index) || (Image1Index === Image3Index) || (Image2Index === Image3Index)||checkindex.includes(Image1Index)||checkindex.includes(Image2Index)||checkindex.includes(Image3Index)) {    
+        Image1Index=generateRandomIndex();
             Image2Index = generateRandomIndex();
-            Image3Index = generateRandomIndex();
+        Image3Index = generateRandomIndex();
         }
-    
+        checkindex[0]=Image1Index;
+        checkindex[1]=Image2Index;
+        checkindex[2]=Image3Index;
         Image1.setAttribute('src', arrayOfProducts[Image1Index].source);
         Image2.setAttribute('src', arrayOfProducts[Image2Index].source);
         Image3.setAttribute('src', arrayOfProducts[Image3Index].source);
@@ -61,10 +68,11 @@
     }
     render();
     
-    
+
     
     
     function generateRandomIndex() {
+        
         let randomIndex = Math.floor(Math.random() * arrayOfProducts.length);
         return randomIndex;
     }
@@ -87,7 +95,8 @@
                 attemps++;
     
             }
-            render();
+     render();
+
         }
         else {
             let list = document.getElementById('list')
@@ -98,36 +107,34 @@
                 li.textContent = `${arrayOfProducts[i].name} Has ${arrayOfProducts[i].selectedProducts} selectedPrds and Showen ${arrayOfProducts[i].numShowen}`
                 
             }
-                
-                container.removeEventListener('click', imageClick)
-                chartRender();
-         }
+            for(let j = 0 ; j < arrayOfProducts.length ; j++){
+                arrOfVotes.push(arrayOfProducts[j].selectedProducts);
+                imagesCountArr.push(arrayOfProducts[j].numShowen);
             }
+            //    chartRender();
+             container.removeEventListener('click', imageClick)
+                
+         }}
 
             function chartRender(){
             var ctx = document.getElementById('myChart').getContext('2d');
             var chart = new Chart(ctx, {
-                // The type of chart we want to create
                 type: 'bar',
-            
-                // The data for our dataset
                 data: {
                     labels: namesArr,
                     datasets: [{
                         label: 'Product Votes',
                         backgroundColor: '#e36bae',
                         borderColor: 'rgb(255, 99, 132)',
-                        data: [1,2,2,3,1,5,6,2,3,8],
+                        data: arrOfVotes,
                     },{
                         label: 'Goats Displayed',
                         backgroundColor: '#f1d1d0',
                         borderColor:'rgb(155,100,30)',
-                        data: [1,2,2,3,1,5,6,2,3,8],
+                        data: imagesCountArr,
             
                     }]
                 },
-            
-                // Configuration options go here
                 options: {}
             });
         }

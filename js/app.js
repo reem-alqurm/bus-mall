@@ -66,8 +66,8 @@
         arrayOfProducts[Image2Index].numShowen++;
         arrayOfProducts[Image3Index].numShowen++;
     }
-    render();
     
+    render();
 
     
     
@@ -95,8 +95,9 @@
                 attemps++;
     
             }
-     render();
 
+            saveVote();
+             render();
         }
         else {
             let list = document.getElementById('list')
@@ -111,7 +112,7 @@
                 arrOfVotes.push(arrayOfProducts[j].selectedProducts);
                 imagesCountArr.push(arrayOfProducts[j].numShowen);
             }
-            //    chartRender();
+           
              container.removeEventListener('click', imageClick)
                 
          }}
@@ -138,5 +139,22 @@
                 options: {}
             });
         }
-            
-            
+    function saveVote ()
+    {
+        let savevote = JSON.stringify(arrayOfProducts);
+        localStorage.setItem('allvotes', savevote);
+    }
+    function getVote()
+    {
+        let getvote = localStorage.getItem('allvotes');
+        let newList = JSON.parse(getvote);
+        if (newList){
+            arrayOfProducts = newList;
+        }
+        else {
+            arrayOfProducts = [];
+                }
+                render();
+                console.log(arrayOfProducts);
+    }
+    getVote();
